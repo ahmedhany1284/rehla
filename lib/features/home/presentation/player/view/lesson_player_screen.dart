@@ -52,6 +52,7 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen>
       if (tween == null || !mounted) return;
       setState(() => _pull = tween.value);
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scheduleHide());
   }
 
   void _onPull(double value) {
@@ -100,20 +101,33 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen>
 
   void _onCenterTap() {
     context.read<PlayerCubit>().togglePlay();
-    if (!_fullscreen || _controlsVisible) return;
-    setState(() => _controlsVisible = true);
+    if (!_controlsVisible) {
+      setState(() => _controlsVisible = true);
+    }
     _scheduleHide();
   }
 
   void _onSideTap() {
-    if (!_fullscreen) return;
     setState(() => _controlsVisible = !_controlsVisible);
     _scheduleHide();
   }
 
+  void _onBack() {
+    if (_fullscreen) {
+      _toggleFullscreen();
+      return;
+    }
+    context.pop();
+  }
+
+  void _exitFullscreen() {
+    if (!_fullscreen) return;
+    _toggleFullscreen();
+  }
+
   void _scheduleHide() {
     _hideTimer?.cancel();
-    if (!_fullscreen || !_controlsVisible) return;
+    if (!_controlsVisible) return;
     _hideTimer = Timer(const Duration(seconds: 3), () {
       if (mounted) setState(() => _controlsVisible = false);
     });
@@ -148,9 +162,25 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen>
         return BlocBuilder<PlayerCubit, PlayerState>(
           builder: (context, state) {
             final video = context.read<PlayerCubit>().controller;
+            final playing =
+                state.status != PlayerStatus.loading &&
+                state.status != PlayerStatus.error;
+            final title = state.title.localized(context).isEmpty
+                ? AppStrings.lesson
+                : state.title.localized(context);
+            final topBar = _controlsVisible
+                ? _PlayerNavBar(title: title, onBack: _onBack)
+                : null;
+            final bottomBar = _controlsVisible
+                ? PlayerControls(
+                    fullscreen: _fullscreen,
+                    onFullscreen: _toggleFullscreen,
+                    onInteraction: _scheduleHide,
+                  )
+                : null;
             return Scaffold(
               backgroundColor: AppColors.background,
-              appBar: _fullscreen
+              appBar: _fullscreen || playing
                   ? null
                   : PreferredSize(
                       preferredSize: Size.fromHeight(
@@ -160,11 +190,7 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen>
                         child: Align(
                           alignment: Alignment.bottomCenter,
                           heightFactor: (1 - _pull).clamp(0, 1),
-                          child: AppCustomAppBar(
-                            title: state.title.localized(context).isEmpty
-                                ? AppStrings.lesson
-                                : state.title.localized(context),
-                          ),
+                          child: AppCustomAppBar(title: title),
                         ),
                       ),
                     ),
@@ -206,13 +232,9 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen>
                             onCenterTap: _onCenterTap,
                             onSideTap: _onSideTap,
                             onEnterFullscreen: _enterFullscreen,
-                            controls: _controlsVisible
-                                ? PlayerControls(
-                                    fullscreen: true,
-                                    onFullscreen: _toggleFullscreen,
-                                    onInteraction: _scheduleHide,
-                                  )
-                                : null,
+                            onExitFullscreen: _exitFullscreen,
+                            topBar: topBar,
+                            controls: bottomBar,
                           ),
                         ),
                       )
@@ -230,10 +252,8 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen>
                             onEnterFullscreen: _enterFullscreen,
                             onPull: _onPull,
                             onPullEnd: _onPullEnd,
-                            controls: PlayerControls(
-                            fullscreen: false,
-                            onFullscreen: _toggleFullscreen,
-                          ),
+                            topBar: topBar,
+                            controls: bottomBar,
                         ),
                       ),
                       ),
@@ -292,8 +312,10 @@ class _FittedVideo extends StatefulWidget {
     required this.onCenterTap,
     required this.onSideTap,
     required this.onEnterFullscreen,
+    this.onExitFullscreen,
     this.onPull,
     this.onPullEnd,
+    this.topBar,
     required this.controls,
   });
 
@@ -303,8 +325,10 @@ class _FittedVideo extends StatefulWidget {
   final VoidCallback onCenterTap;
   final VoidCallback onSideTap;
   final VoidCallback onEnterFullscreen;
+  final VoidCallback? onExitFullscreen;
   final ValueChanged<double>? onPull;
   final ValueChanged<bool>? onPullEnd;
+  final Widget? topBar;
   final Widget? controls;
 
   @override
@@ -353,7 +377,11 @@ class _FittedVideoState extends State<_FittedVideo> {
   }
 
   void _onSwipeEnd(DragEndDetails _) {
-    if (widget.fullscreen) return;
+    if (widget.fullscreen) {
+      final downward = _dragY > 64 && _dragY.abs() > _dragX.abs();
+      if (downward) widget.onExitFullscreen?.call();
+      return;
+    }
     final mostlyVertical = _dragY.abs() > _dragX.abs() && _dragY < -24;
     final reachedTop = _lastY < 48;
     widget.onPullEnd?.call(mostlyVertical && reachedTop);
@@ -439,6 +467,13 @@ class _FittedVideoState extends State<_FittedVideo> {
                     ),
                   ),
                 ),
+              if (widget.topBar != null)
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  child: widget.topBar!,
+                ),
               if (widget.controls != null)
                 Positioned(
                   left: 0,
@@ -450,6 +485,54 @@ class _FittedVideoState extends State<_FittedVideo> {
           ),
         );
       },
+    );
+  }
+}
+
+class _PlayerNavBar extends StatelessWidget {
+  const _PlayerNavBar({required this.title, required this.onBack});
+
+  final String title;
+  final VoidCallback onBack;
+
+  @override
+  Widget build(BuildContext context) {
+    final top = MediaQuery.paddingOf(context).top;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppColors.mainBlack900.withValues(alpha: 0.82),
+            AppColors.transparent,
+          ],
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(top: top),
+        child: Row(
+          children: [
+            IconButton(
+              onPressed: onBack,
+              iconSize: 26,
+              constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+              icon: Icon(Icons.arrow_back, color: AppColors.whiteConstant),
+            ),
+            Expanded(
+              child: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyle.semiBold16.copyWith(
+                  color: AppColors.whiteConstant,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+          ],
+        ),
+      ),
     );
   }
 }
