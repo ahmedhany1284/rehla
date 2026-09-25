@@ -1,11 +1,29 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rehla/core/presentation/view_model/cubit/app_cubit.dart';
 import 'package:rehla/core/presentation/view_model/cubit/app_state.dart';
+import 'package:rehla/core/services/intializer_service/initializer_service.dart';
 import 'package:rehla/core/theme/app_theme.dart';
+import 'package:rehla/core/utils/app_consts.dart';
+import 'package:rehla/generated/assets.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AppInitializer().init();
+
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [
+        Locale('ar'),
+        Locale('en'),
+      ],
+      path: AssetData.translations,
+      fallbackLocale: const Locale('ar'),
+      startLocale: const Locale('ar'),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,12 +34,21 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (_) => AppCubit(),
       child: BlocBuilder<AppCubit, AppState>(
-        buildWhen: (previous, current) => current is ChangeFontState,
+        buildWhen: (previous, current) =>
+            current is ChangeThemeState ||
+            current is ChangeLanguageState ||
+            current is ChangeFontState,
         builder: (context, state) {
           final appCubit = context.read<AppCubit>();
           return MaterialApp(
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            debugShowCheckedModeBanner: false,
             title: 'Rehla',
             theme: AppTheme.appLightTheme(appCubit.currentFontFamily),
+            darkTheme: AppTheme.appDarkTheme(appCubit.currentFontFamily),
+            themeMode: AppConst.isDark ? ThemeMode.dark : ThemeMode.light,
             home: const MyHomePage(title: 'Flutter Demo Home Page'),
           );
         },
