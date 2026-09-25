@@ -29,19 +29,31 @@ class PlayerControls extends StatelessWidget {
         final fraction = total == 0
             ? 0.0
             : (state.position.inMilliseconds / total).clamp(0.0, 1.0);
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                AppColors.transparent,
-                AppColors.mainBlack900.withValues(alpha: 0.82),
-              ],
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IgnorePointer(
+              child: SizedBox(
+                height: 36,
+                width: double.infinity,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        AppColors.transparent,
+                        AppColors.mainBlack900.withValues(alpha: 0.82),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(8, 28, 8, 8 + bottom),
+            ColoredBox(
+              color: AppColors.mainBlack900.withValues(alpha: 0.82),
+              child: Padding(
+            padding: EdgeInsets.fromLTRB(8, 0, 8, 8 + bottom),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -118,6 +130,8 @@ class PlayerControls extends StatelessWidget {
               ],
             ),
           ),
+            ),
+          ],
         );
       },
     );

@@ -28,5 +28,6 @@
   "player_load_failed": "Could not play this lesson",
   "playback_speed": "Playback speed",
   "next_lesson": "Next lesson",
-  "back": "Back"
+  "back": "Back",
+  "seek_seconds": "5 seconds"
 }

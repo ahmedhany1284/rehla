@@ -62,4 +62,6 @@ class AppStrings {
   static String get nextLesson => 'next_lesson'.tr();
 
   static String get back => 'back'.tr();
+
+  static String get seekSeconds => 'seek_seconds'.tr();
 }

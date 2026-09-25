@@ -21,6 +21,8 @@ class PlayerCubit extends Cubit<PlayerState> {
   bool _completed = false;
   String _lessonId = '';
   List<Lesson> _lessons = const [];
+  int _resumeSec = 0;
+  int _resumeTries = 0;
 
   Future<void> load({
     required String courseId,
@@ -64,8 +66,10 @@ class PlayerCubit extends Cubit<PlayerState> {
           await video.setVolume(1);
           video.addListener(_onTick);
           final saved = playback.progress?.positionSec ?? 0;
-          if (!_completed && saved > 0) {
-            await video.seekTo(Duration(seconds: saved));
+          _resumeSec = saved > 0 ? saved : 0;
+          _resumeTries = 0;
+          if (_resumeSec > 0) {
+            await video.seekTo(Duration(seconds: _resumeSec));
           }
           _emitFromController(PlayerStatus.ready);
         } catch (_) {
@@ -90,11 +94,25 @@ class PlayerCubit extends Cubit<PlayerState> {
     _emitFromController(PlayerStatus.playing);
   }
 
+  Future<void> seekBy(Duration offset) async {
+    final video = controller;
+    if (video == null || !video.value.isInitialized) return;
+    var target = video.value.position + offset;
+    if (target.isNegative) target = Duration.zero;
+    if (target > video.value.duration) target = video.value.duration;
+    await video.seekTo(target);
+    await _save(force: true);
+    _emitFromController(
+      video.value.isPlaying ? PlayerStatus.playing : PlayerStatus.paused,
+    );
+  }
+
   Future<void> seekToFraction(double fraction) async {
     final video = controller;
     if (video == null || !video.value.isInitialized) return;
     final target = video.value.duration * fraction.clamp(0, 1);
     await video.seekTo(target);
+    await _save(force: true);
     _emitFromController(
       video.value.isPlaying ? PlayerStatus.playing : PlayerStatus.paused,
     );
@@ -132,6 +150,14 @@ class PlayerCubit extends Cubit<PlayerState> {
     if (video.value.hasError) {
       emit(state.copyWith(status: PlayerStatus.error));
       return;
+    }
+    if (_resumeSec > 0 &&
+        video.value.position.inSeconds + 1 < _resumeSec &&
+        _resumeTries < 4) {
+      _resumeTries++;
+      video.seekTo(Duration(seconds: _resumeSec));
+    } else {
+      _resumeSec = 0;
     }
     final positionMs = video.value.position.inMilliseconds;
     final durationMs = video.value.duration.inMilliseconds;
