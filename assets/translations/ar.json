@@ -17,5 +17,12 @@
   "dark": "الوضع الداكن",
   "select_language": "اختر اللغة",
   "select_theme": "اختر المظهر",
-  "apply": "تطبيق"
+  "apply": "تطبيق",
+  "course_details": "الدورة",
+  "lessons_empty": "لا توجد دروس في هذه الدورة بعد",
+  "not_started": "لم يبدأ",
+  "in_progress": "قيد المشاهدة",
+  "completed": "مكتمل",
+  "lesson_locked": "أنهِ الدرس السابق لفتح هذا الدرس",
+  "lesson": "الدرس"
 }

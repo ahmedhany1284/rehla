@@ -63,7 +63,12 @@ class HomeScreen extends StatelessWidget {
                   ...data.courses.map(
                     (summary) => Padding(
                       padding: const EdgeInsets.only(bottom: 12),
-                      child: CourseCard(summary: summary),
+                      child: CourseCard(
+                        summary: summary,
+                        onTap: () => context.push(
+                          AppRouter.courseDetails(summary.course.id),
+                        ),
+                      ),
                     ),
                   ),
                 ],

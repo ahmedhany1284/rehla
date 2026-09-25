@@ -6,4 +6,9 @@ abstract class CourseRepository {
   Future<Either<Failure, List<CourseSummary>>> getCourses();
 
   Future<Either<Failure, ContinueWatching?>> getContinueWatching();
+
+  Future<
+    Either<Failure, ({Course course, Map<String, LessonProgress> progress})>
+  >
+  getCourseById(String courseId);
 }

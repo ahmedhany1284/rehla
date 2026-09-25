@@ -17,5 +17,12 @@
   "dark": "Dark mode",
   "select_language": "Select language",
   "select_theme": "Select theme",
-  "apply": "Apply"
+  "apply": "Apply",
+  "course_details": "Course",
+  "lessons_empty": "This course has no lessons yet",
+  "not_started": "Not started",
+  "in_progress": "In progress",
+  "completed": "Completed",
+  "lesson_locked": "Finish the previous lesson to unlock this one",
+  "lesson": "Lesson"
 }

@@ -28,11 +28,7 @@ class Lesson extends Equatable {
 }
 
 class Section extends Equatable {
-  const Section({
-    required this.id,
-    required this.title,
-    required this.lessons,
-  });
+  const Section({required this.id, required this.title, required this.lessons});
 
   final String id;
   final LocalizedString title;
@@ -68,10 +64,7 @@ class Course extends Equatable {
 }
 
 class CourseSummary extends Equatable {
-  const CourseSummary({
-    required this.course,
-    required this.progressPercent,
-  });
+  const CourseSummary({required this.course, required this.progressPercent});
 
   final Course course;
   final double progressPercent;
@@ -95,11 +88,55 @@ class ContinueWatching extends Equatable {
   List<Object> get props => [course, lesson, progressPercent];
 }
 
-class HomeData extends Equatable {
-  const HomeData({
-    required this.courses,
-    this.continueWatching,
+class LessonProgress extends Equatable {
+  const LessonProgress({required this.positionSec, required this.completed});
+
+  final int positionSec;
+  final bool completed;
+
+  @override
+  List<Object> get props => [positionSec, completed];
+}
+
+enum LessonStatus { notStarted, inProgress, completed }
+
+class LessonDetails extends Equatable {
+  const LessonDetails({
+    required this.lesson,
+    required this.status,
+    required this.unlocked,
   });
+
+  final Lesson lesson;
+  final LessonStatus status;
+  final bool unlocked;
+
+  @override
+  List<Object> get props => [lesson, status, unlocked];
+}
+
+class SectionDetails extends Equatable {
+  const SectionDetails({required this.section, required this.lessons});
+
+  final Section section;
+  final List<LessonDetails> lessons;
+
+  @override
+  List<Object> get props => [section, lessons];
+}
+
+class CourseDetails extends Equatable {
+  const CourseDetails({required this.course, required this.sections});
+
+  final Course course;
+  final List<SectionDetails> sections;
+
+  @override
+  List<Object> get props => [course, sections];
+}
+
+class HomeData extends Equatable {
+  const HomeData({required this.courses, this.continueWatching});
 
   final List<CourseSummary> courses;
   final ContinueWatching? continueWatching;

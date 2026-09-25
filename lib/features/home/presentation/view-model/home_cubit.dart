@@ -16,10 +16,7 @@ class HomeCubit extends Cubit<HomeState> {
     final result = await _getCoursesUseCase(const NoParameters());
     result.fold(
       (failure) => emit(
-        state.copyWith(
-          status: HomeStatus.error,
-          errorMessage: failure.message,
-        ),
+        state.copyWith(status: HomeStatus.error, errorMessage: failure.message),
       ),
       (data) {
         if (data.courses.isEmpty) {

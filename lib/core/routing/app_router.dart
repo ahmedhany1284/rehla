@@ -1,8 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rehla/core/presentation/view/focus_handler.dart';
+import 'package:rehla/features/home/domain/repositories/course_repository.dart';
+import 'package:rehla/features/home/domain/usecases/get_course_details_usecase.dart';
+import 'package:rehla/features/home/presentation/course_details/view-model/course_details_cubit.dart';
+import 'package:rehla/features/home/presentation/course_details/view/course_details_screen.dart';
+import 'package:rehla/features/home/presentation/lesson/view/lesson_player_screen.dart';
 import 'package:rehla/features/home/presentation/view/home_screen.dart';
 import 'package:rehla/features/settings/presentation/view/settings_screen.dart';
 
@@ -11,6 +17,13 @@ enum PageRouteAnimation { fade, scale, rotate, slide, slideBottomTop }
 class AppRouter {
   static const String kHome = '/';
   static const String kSettings = '/settings';
+  static const String kCourseDetails = '/course/:courseId';
+  static const String kLessonPlayer = '/course/:courseId/lesson/:lessonId';
+
+  static String courseDetails(String courseId) => '/course/$courseId';
+
+  static String lessonPlayer(String courseId, String lessonId) =>
+      '/course/$courseId/lesson/$lessonId';
 
   static Page<void> animateRoute(
     Widget widget, {
@@ -89,6 +102,33 @@ class AppRouter {
           return animateRoute(
             const HomeScreen(),
             pageRouteAnimation: PageRouteAnimation.fade,
+          );
+        },
+      ),
+      GoRoute(
+        path: kLessonPlayer,
+        pageBuilder: (context, state) {
+          return animateRoute(
+            LessonPlayerScreen(
+              courseId: state.pathParameters['courseId'] ?? '',
+              lessonId: state.pathParameters['lessonId'] ?? '',
+            ),
+            pageRouteAnimation: PageRouteAnimation.slide,
+          );
+        },
+      ),
+      GoRoute(
+        path: kCourseDetails,
+        pageBuilder: (context, state) {
+          final courseId = state.pathParameters['courseId'] ?? '';
+          return animateRoute(
+            BlocProvider(
+              create: (context) => CourseDetailsCubit(
+                GetCourseDetailsUseCase(context.read<CourseRepository>()),
+              )..load(courseId),
+              child: CourseDetailsScreen(courseId: courseId),
+            ),
+            pageRouteAnimation: PageRouteAnimation.slide,
           );
         },
       ),

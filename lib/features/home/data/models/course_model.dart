@@ -11,7 +11,9 @@ class CourseModel extends Course {
 
   factory CourseModel.fromJson(Map<String, dynamic> json) {
     final sections = (json['sections'] as List<dynamic>? ?? [])
-        .map((section) => SectionModel.fromJson(section as Map<String, dynamic>))
+        .map(
+          (section) => SectionModel.fromJson(section as Map<String, dynamic>),
+        )
         .toList();
     return CourseModel(
       id: json['id'] as String? ?? '',

@@ -11,6 +11,7 @@ import 'package:rehla/core/utils/app_consts.dart';
 import 'package:rehla/core/utils/app_strings.dart';
 import 'package:rehla/features/home/data/datasources/course_local_datasource.dart';
 import 'package:rehla/features/home/data/repositories/course_repository_impl.dart';
+import 'package:rehla/features/home/domain/repositories/course_repository.dart';
 import 'package:rehla/features/home/domain/usecases/get_courses_usecase.dart';
 import 'package:rehla/features/home/presentation/view-model/home_cubit.dart';
 import 'package:rehla/generated/assets.dart';
@@ -36,34 +37,37 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppFocusHandler(
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (_) => AppCubit()),
-          BlocProvider(
-            create: (_) => HomeCubit(
-              GetCoursesUseCase(CourseRepositoryImpl(CourseLocalDataSource())),
-            )..getCourses(),
+      child: RepositoryProvider<CourseRepository>(
+        create: (_) => CourseRepositoryImpl(CourseLocalDataSource()),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => AppCubit()),
+            BlocProvider(
+              create: (context) =>
+                  HomeCubit(GetCoursesUseCase(context.read<CourseRepository>()))
+                    ..getCourses(),
+            ),
+          ],
+          child: BlocBuilder<AppCubit, AppState>(
+            buildWhen: (previous, current) =>
+                current is ChangeThemeState ||
+                current is ChangeLanguageState ||
+                current is ChangeFontState,
+            builder: (context, state) {
+              final appCubit = context.read<AppCubit>();
+              return MaterialApp.router(
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                debugShowCheckedModeBanner: false,
+                title: AppStrings.appName,
+                theme: AppTheme.appLightTheme(appCubit.currentFontFamily),
+                darkTheme: AppTheme.appDarkTheme(appCubit.currentFontFamily),
+                themeMode: AppConst.isDark ? ThemeMode.dark : ThemeMode.light,
+                routerConfig: AppRouter.router,
+              );
+            },
           ),
-        ],
-        child: BlocBuilder<AppCubit, AppState>(
-          buildWhen: (previous, current) =>
-              current is ChangeThemeState ||
-              current is ChangeLanguageState ||
-              current is ChangeFontState,
-          builder: (context, state) {
-            final appCubit = context.read<AppCubit>();
-            return MaterialApp.router(
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              locale: context.locale,
-              debugShowCheckedModeBanner: false,
-              title: AppStrings.appName,
-              theme: AppTheme.appLightTheme(appCubit.currentFontFamily),
-              darkTheme: AppTheme.appDarkTheme(appCubit.currentFontFamily),
-              themeMode: AppConst.isDark ? ThemeMode.dark : ThemeMode.light,
-              routerConfig: AppRouter.router,
-            );
-          },
         ),
       ),
     );

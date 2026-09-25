@@ -20,10 +20,7 @@ class HomeMessage extends StatelessWidget {
               style: AppTextStyle.medium16,
               textAlign: TextAlign.center,
             ),
-            if (action != null) ...[
-              const SizedBox(height: 16),
-              action!,
-            ],
+            if (action != null) ...[const SizedBox(height: 16), action!],
           ],
         ),
       ),

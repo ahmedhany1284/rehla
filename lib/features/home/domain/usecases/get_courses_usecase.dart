@@ -12,20 +12,16 @@ class GetCoursesUseCase extends BaseUseCase<HomeData, NoParameters> {
   @override
   Future<Either<Failure, HomeData>> call(NoParameters parameters) async {
     final coursesResult = await repository.getCourses();
-    return coursesResult.fold(
-      (failure) async => Left(failure),
-      (courses) async {
-        final continueResult = await repository.getContinueWatching();
-        return continueResult.fold(
-          (failure) => Left<Failure, HomeData>(failure),
-          (continueWatching) => Right(
-            HomeData(
-              courses: courses,
-              continueWatching: continueWatching,
-            ),
-          ),
-        );
-      },
-    );
+    return coursesResult.fold((failure) async => Left(failure), (
+      courses,
+    ) async {
+      final continueResult = await repository.getContinueWatching();
+      return continueResult.fold(
+        (failure) => Left<Failure, HomeData>(failure),
+        (continueWatching) => Right(
+          HomeData(courses: courses, continueWatching: continueWatching),
+        ),
+      );
+    });
   }
 }

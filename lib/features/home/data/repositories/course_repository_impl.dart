@@ -61,6 +61,24 @@ class CourseRepositoryImpl implements CourseRepository {
     }
   }
 
+  @override
+  Future<
+    Either<Failure, ({Course course, Map<String, LessonProgress> progress})>
+  >
+  getCourseById(String courseId) async {
+    try {
+      final courses = await _loadCourses();
+      for (final course in courses) {
+        if (course.id == courseId) {
+          return Right((course: course, progress: _readLessonProgress()));
+        }
+      }
+      return const Left(CacheFailure());
+    } catch (_) {
+      return const Left(CacheFailure());
+    }
+  }
+
   Future<List<CourseModel>> _loadCourses() async {
     final cached = _cachedCourses;
     if (cached != null) return cached;
@@ -71,7 +89,7 @@ class CourseRepositoryImpl implements CourseRepository {
     return courses;
   }
 
-  Map<String, _LessonProgress> _readLessonProgress() {
+  Map<String, LessonProgress> _readLessonProgress() {
     try {
       final raw = AppCacheHelper.getCacheString(
         key: AppCacheHelper.lessonProgress,
@@ -83,7 +101,7 @@ class CourseRepositoryImpl implements CourseRepository {
         final map = value as Map<String, dynamic>;
         return MapEntry(
           id,
-          _LessonProgress(
+          LessonProgress(
             positionSec: (map['positionSec'] as num?)?.toInt() ?? 0,
             completed: map['completed'] as bool? ?? false,
           ),
@@ -94,7 +112,7 @@ class CourseRepositoryImpl implements CourseRepository {
     }
   }
 
-  double _courseProgress(Course course, Map<String, _LessonProgress> progress) {
+  double _courseProgress(Course course, Map<String, LessonProgress> progress) {
     final total = course.lessonCount;
     if (total == 0) return 0;
     final completed = course.lessons
@@ -102,14 +120,4 @@ class CourseRepositoryImpl implements CourseRepository {
         .length;
     return (completed / total) * 100;
   }
-}
-
-class _LessonProgress {
-  const _LessonProgress({
-    required this.positionSec,
-    required this.completed,
-  });
-
-  final int positionSec;
-  final bool completed;
 }

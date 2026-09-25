@@ -40,4 +40,18 @@ class AppStrings {
   static String get selectTheme => 'select_theme'.tr();
 
   static String get apply => 'apply'.tr();
+
+  static String get courseDetails => 'course_details'.tr();
+
+  static String get lessonsEmpty => 'lessons_empty'.tr();
+
+  static String get notStarted => 'not_started'.tr();
+
+  static String get inProgress => 'in_progress'.tr();
+
+  static String get completed => 'completed'.tr();
+
+  static String get lessonLocked => 'lesson_locked'.tr();
+
+  static String get lesson => 'lesson'.tr();
 }
