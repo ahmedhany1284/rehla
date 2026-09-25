@@ -32,10 +32,48 @@ class LessonPlayerScreen extends StatefulWidget {
   State<LessonPlayerScreen> createState() => _LessonPlayerScreenState();
 }
 
-class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
+class _LessonPlayerScreenState extends State<LessonPlayerScreen>
+    with SingleTickerProviderStateMixin {
   bool _fullscreen = false;
   bool _controlsVisible = true;
   Timer? _hideTimer;
+  double _pull = 0;
+  late final AnimationController _pullAnim = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 240),
+  );
+  Animation<double>? _pullTween;
+
+  @override
+  void initState() {
+    super.initState();
+    _pullAnim.addListener(() {
+      final tween = _pullTween;
+      if (tween == null || !mounted) return;
+      setState(() => _pull = tween.value);
+    });
+  }
+
+  void _onPull(double value) {
+    _pullAnim.stop();
+    _pullTween = null;
+    setState(() => _pull = value.clamp(0, 1));
+  }
+
+  void _onPullEnd(bool commit) {
+    if (_fullscreen) return;
+    if (commit) {
+      _pullAnim.stop();
+      _pullTween = null;
+      setState(() => _pull = 0);
+      _enterFullscreen();
+      return;
+    }
+    _pullTween = Tween<double>(begin: _pull, end: 0).animate(
+      CurvedAnimation(parent: _pullAnim, curve: Curves.easeOut),
+    );
+    _pullAnim.forward(from: 0);
+  }
 
   Future<void> _toggleFullscreen() async {
     final next = !_fullscreen;
@@ -98,6 +136,7 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
   @override
   void dispose() {
     _hideTimer?.cancel();
+    _pullAnim.dispose();
     _restoreOrientation();
     super.dispose();
   }
@@ -113,10 +152,21 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
               backgroundColor: AppColors.background,
               appBar: _fullscreen
                   ? null
-                  : AppCustomAppBar(
-                      title: state.title.localized(context).isEmpty
-                          ? AppStrings.lesson
-                          : state.title.localized(context),
+                  : PreferredSize(
+                      preferredSize: Size.fromHeight(
+                        kToolbarHeight * (1 - _pull),
+                      ),
+                      child: ClipRect(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          heightFactor: (1 - _pull).clamp(0, 1),
+                          child: AppCustomAppBar(
+                            title: state.title.localized(context).isEmpty
+                                ? AppStrings.lesson
+                                : state.title.localized(context),
+                          ),
+                        ),
+                      ),
                     ),
               body: switch (state.status) {
                 PlayerStatus.loading => const Center(
@@ -138,9 +188,11 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
                         ? video.value.aspectRatio
                         : 16 / 9;
                     final natural = constraints.maxWidth / aspect;
-                    final videoHeight = natural > constraints.maxHeight * 0.7
+                    final resting = natural > constraints.maxHeight * 0.7
                         ? constraints.maxHeight * 0.7
                         : natural;
+                    final videoHeight =
+                        resting + (constraints.maxHeight - resting) * _pull;
                     return Column(
                   children: [
                     if (_fullscreen)
@@ -175,8 +227,10 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
                           fullscreen: false,
                           onCenterTap: _onCenterTap,
                           onSideTap: _onSideTap,
-                          onEnterFullscreen: _enterFullscreen,
-                          controls: PlayerControls(
+                            onEnterFullscreen: _enterFullscreen,
+                            onPull: _onPull,
+                            onPullEnd: _onPullEnd,
+                            controls: PlayerControls(
                             fullscreen: false,
                             onFullscreen: _toggleFullscreen,
                           ),
@@ -185,7 +239,9 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
                       ),
                     if (!_fullscreen)
                       Expanded(
-                        child: ListView(
+                        child: Opacity(
+                          opacity: (1 - _pull).clamp(0, 1),
+                          child: ListView(
                           padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                           children: [
                             Text(
@@ -213,6 +269,7 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
                             ],
                           ],
                         ),
+                        ),
                       ),
                   ],
                     );
@@ -235,6 +292,8 @@ class _FittedVideo extends StatefulWidget {
     required this.onCenterTap,
     required this.onSideTap,
     required this.onEnterFullscreen,
+    this.onPull,
+    this.onPullEnd,
     required this.controls,
   });
 
@@ -244,6 +303,8 @@ class _FittedVideo extends StatefulWidget {
   final VoidCallback onCenterTap;
   final VoidCallback onSideTap;
   final VoidCallback onEnterFullscreen;
+  final ValueChanged<double>? onPull;
+  final ValueChanged<bool>? onPullEnd;
   final Widget? controls;
 
   @override
@@ -254,6 +315,8 @@ class _FittedVideoState extends State<_FittedVideo> {
   double _downX = 0;
   double _dragX = 0;
   double _dragY = 0;
+  double _originY = 0;
+  double _lastY = 0;
   int? _flashSide;
   bool _flashBackward = true;
   int _flashToken = 0;
@@ -290,12 +353,10 @@ class _FittedVideoState extends State<_FittedVideo> {
   }
 
   void _onSwipeEnd(DragEndDetails _) {
-    const distance = 48.0;
-    final upward = _dragY < -distance;
-    final mostlyVertical = _dragY.abs() > _dragX.abs();
-    if (upward && mostlyVertical) {
-      widget.onEnterFullscreen();
-    }
+    if (widget.fullscreen) return;
+    final mostlyVertical = _dragY.abs() > _dragX.abs() && _dragY < -24;
+    final reachedTop = _lastY < 48;
+    widget.onPullEnd?.call(mostlyVertical && reachedTop);
   }
 
   @override
@@ -329,13 +390,21 @@ class _FittedVideoState extends State<_FittedVideo> {
                     _downX = details.localPosition.dx,
                 onDoubleTap: () => _onDoubleTap(width),
                 onTap: () => _onTap(width),
-                onVerticalDragStart: (_) {
+                onVerticalDragStart: (details) {
                   _dragX = 0;
                   _dragY = 0;
+                  _originY = details.globalPosition.dy;
+                  _lastY = _originY;
                 },
                 onVerticalDragUpdate: (details) {
                   _dragX += details.delta.dx;
                   _dragY += details.delta.dy;
+                  _lastY = details.globalPosition.dy;
+                  if (widget.fullscreen) return;
+                  if (_dragY < -8 && _dragY.abs() > _dragX.abs()) {
+                    final needed = _originY < 1 ? 1.0 : _originY;
+                    widget.onPull?.call((-_dragY / needed).clamp(0.0, 1.0));
+                  }
                 },
                 onVerticalDragEnd: _onSwipeEnd,
                 child: SizedBox(
