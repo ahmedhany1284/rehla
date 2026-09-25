@@ -11,4 +11,10 @@ abstract class CourseRepository {
     Either<Failure, ({Course course, Map<String, LessonProgress> progress})>
   >
   getCourseById(String courseId);
+
+  Future<Either<Failure, Unit>> saveLessonProgress({
+    required String lessonId,
+    required int positionSec,
+    required bool completed,
+  });
 }

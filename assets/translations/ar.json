@@ -24,5 +24,9 @@
   "in_progress": "قيد المشاهدة",
   "completed": "مكتمل",
   "lesson_locked": "أنهِ الدرس السابق لفتح هذا الدرس",
-  "lesson": "الدرس"
+  "lesson": "الدرس",
+  "player_load_failed": "تعذر تشغيل هذا الدرس",
+  "playback_speed": "سرعة التشغيل",
+  "next_lesson": "الدرس التالي",
+  "back": "رجوع"
 }

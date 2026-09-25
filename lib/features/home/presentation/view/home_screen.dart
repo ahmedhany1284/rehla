@@ -65,9 +65,14 @@ class HomeScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 12),
                       child: CourseCard(
                         summary: summary,
-                        onTap: () => context.push(
-                          AppRouter.courseDetails(summary.course.id),
-                        ),
+                        onTap: () async {
+                          await context.push(
+                            AppRouter.courseDetails(summary.course.id),
+                          );
+                          if (context.mounted) {
+                            context.read<HomeCubit>().getCourses();
+                          }
+                        },
                       ),
                     ),
                   ),

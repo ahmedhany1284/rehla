@@ -6,9 +6,12 @@ import 'package:go_router/go_router.dart';
 import 'package:rehla/core/presentation/view/focus_handler.dart';
 import 'package:rehla/features/home/domain/repositories/course_repository.dart';
 import 'package:rehla/features/home/domain/usecases/get_course_details_usecase.dart';
+import 'package:rehla/features/home/domain/usecases/get_lesson_playback_usecase.dart';
+import 'package:rehla/features/home/domain/usecases/save_lesson_progress_usecase.dart';
 import 'package:rehla/features/home/presentation/course_details/view-model/course_details_cubit.dart';
 import 'package:rehla/features/home/presentation/course_details/view/course_details_screen.dart';
-import 'package:rehla/features/home/presentation/lesson/view/lesson_player_screen.dart';
+import 'package:rehla/features/home/presentation/player/view-model/player_cubit.dart';
+import 'package:rehla/features/home/presentation/player/view/lesson_player_screen.dart';
 import 'package:rehla/features/home/presentation/view/home_screen.dart';
 import 'package:rehla/features/settings/presentation/view/settings_screen.dart';
 
@@ -108,10 +111,18 @@ class AppRouter {
       GoRoute(
         path: kLessonPlayer,
         pageBuilder: (context, state) {
+          final courseId = state.pathParameters['courseId'] ?? '';
+          final lessonId = state.pathParameters['lessonId'] ?? '';
           return animateRoute(
-            LessonPlayerScreen(
-              courseId: state.pathParameters['courseId'] ?? '',
-              lessonId: state.pathParameters['lessonId'] ?? '',
+            BlocProvider(
+              create: (context) => PlayerCubit(
+                GetLessonPlaybackUseCase(context.read<CourseRepository>()),
+                SaveLessonProgressUseCase(context.read<CourseRepository>()),
+              )..load(courseId: courseId, lessonId: lessonId),
+              child: LessonPlayerScreen(
+                courseId: courseId,
+                lessonId: lessonId,
+              ),
             ),
             pageRouteAnimation: PageRouteAnimation.slide,
           );

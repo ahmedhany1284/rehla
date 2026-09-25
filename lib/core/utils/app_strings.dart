@@ -54,4 +54,12 @@ class AppStrings {
   static String get lessonLocked => 'lesson_locked'.tr();
 
   static String get lesson => 'lesson'.tr();
+
+  static String get playerLoadFailed => 'player_load_failed'.tr();
+
+  static String get playbackSpeed => 'playback_speed'.tr();
+
+  static String get nextLesson => 'next_lesson'.tr();
+
+  static String get back => 'back'.tr();
 }

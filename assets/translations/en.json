@@ -24,5 +24,9 @@
   "in_progress": "In progress",
   "completed": "Completed",
   "lesson_locked": "Finish the previous lesson to unlock this one",
-  "lesson": "Lesson"
+  "lesson": "Lesson",
+  "player_load_failed": "Could not play this lesson",
+  "playback_speed": "Playback speed",
+  "next_lesson": "Next lesson",
+  "back": "Back"
 }

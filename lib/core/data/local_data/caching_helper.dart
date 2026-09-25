@@ -24,4 +24,11 @@ class AppCacheHelper {
   static String getCacheString({required String key}) {
     return _prefs?.getString(key) ?? '';
   }
+
+  static Future<void> cacheString({
+    required String key,
+    required String value,
+  }) async {
+    await _prefs?.setString(key, value);
+  }
 }

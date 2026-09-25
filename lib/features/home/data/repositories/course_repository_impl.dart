@@ -79,6 +79,36 @@ class CourseRepositoryImpl implements CourseRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, Unit>> saveLessonProgress({
+    required String lessonId,
+    required int positionSec,
+    required bool completed,
+  }) async {
+    try {
+      final current = _readLessonProgress();
+      final alreadyCompleted = current[lessonId]?.completed ?? false;
+      current[lessonId] = LessonProgress(
+        positionSec: positionSec,
+        completed: alreadyCompleted || completed,
+      );
+      final encoded = jsonEncode({
+        for (final entry in current.entries)
+          entry.key: {
+            'positionSec': entry.value.positionSec,
+            'completed': entry.value.completed,
+          },
+      });
+      await AppCacheHelper.cacheString(
+        key: AppCacheHelper.lessonProgress,
+        value: encoded,
+      );
+      return const Right(unit);
+    } catch (_) {
+      return const Left(CacheFailure());
+    }
+  }
+
   Future<List<CourseModel>> _loadCourses() async {
     final cached = _cachedCourses;
     if (cached != null) return cached;

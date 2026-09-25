@@ -68,7 +68,7 @@ class CourseDetailsScreen extends StatelessWidget {
           for (final lesson in section.lessons)
             LessonTile(
               item: lesson,
-              onTap: () {
+              onTap: () async {
                 if (!lesson.unlocked) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -83,9 +83,12 @@ class CourseDetailsScreen extends StatelessWidget {
                   );
                   return;
                 }
-                context.push(
+                await context.push(
                   AppRouter.lessonPlayer(details.course.id, lesson.lesson.id),
                 );
+                if (context.mounted) {
+                  context.read<CourseDetailsCubit>().load(courseId);
+                }
               },
             ),
         ],
