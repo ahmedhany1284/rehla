@@ -18,7 +18,7 @@ class AppTextStyle {
   );
 
   static TextStyle get regular14 => TextStyle(
-    color: AppColors.label,
+    color: AppColors.secondary,
     fontFamily: FontFamily.neulisSans,
     fontSize: 14,
     fontWeight: FontWeight.w400,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rehla/core/presentation/view/widgets/app_custom_image_view.dart';
 import 'package:rehla/core/theme/app_colors.dart';
+import 'package:rehla/core/utils/app_consts.dart';
 import 'package:rehla/core/theme/app_text_style.dart';
 
 class AppDefaultButton extends StatelessWidget {
@@ -43,12 +44,18 @@ class AppDefaultButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final disabled = ontap == null && !isLoading && !isTransparent;
     final actualBackgroundColor = isLoading
         ? AppColors.shimmerBase
         : isTransparent
             ? AppColors.transparent
+            : disabled && AppConst.isDark
+            ? AppColors.shimmerBase
             : backgroundColor ?? AppColors.primaryDark;
-    final actualTextColor = textColor ?? AppColors.whiteConstant;
+    final actualTextColor = textColor ??
+        (disabled && AppConst.isDark
+            ? AppColors.secondary
+            : AppColors.whiteConstant);
     final actualIconColor = iconColor ?? actualTextColor;
 
     return Material(
