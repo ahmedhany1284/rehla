@@ -1,5 +1,15 @@
 import 'package:equatable/equatable.dart';
 
+class LocalizedString extends Equatable {
+  const LocalizedString({required this.ar, required this.en});
+
+  final String ar;
+  final String en;
+
+  @override
+  List<Object> get props => [ar, en];
+}
+
 class Lesson extends Equatable {
   const Lesson({
     required this.id,
@@ -9,7 +19,7 @@ class Lesson extends Equatable {
   });
 
   final String id;
-  final String title;
+  final LocalizedString title;
   final int durationSec;
   final String video;
 
@@ -25,7 +35,7 @@ class Section extends Equatable {
   });
 
   final String id;
-  final String title;
+  final LocalizedString title;
   final List<Lesson> lessons;
 
   @override
@@ -42,8 +52,8 @@ class Course extends Equatable {
   });
 
   final String id;
-  final String title;
-  final String instructor;
+  final LocalizedString title;
+  final LocalizedString instructor;
   final String thumbnail;
   final List<Section> sections;
 

@@ -4,6 +4,7 @@ import 'package:rehla/core/theme/app_colors.dart';
 import 'package:rehla/core/theme/app_text_style.dart';
 import 'package:rehla/core/utils/app_strings.dart';
 import 'package:rehla/features/home/domain/entities/course.dart';
+import 'package:rehla/features/home/presentation/view/extensions/localized_string.dart';
 
 class CourseCard extends StatelessWidget {
   const CourseCard({super.key, required this.summary});
@@ -33,9 +34,12 @@ class CourseCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(course.title, style: AppTextStyle.semiBold16),
+                Text(course.title.localized(context), style: AppTextStyle.semiBold16),
                 const SizedBox(height: 4),
-                Text(course.instructor, style: AppTextStyle.regular14),
+                Text(
+                  course.instructor.localized(context),
+                  style: AppTextStyle.regular14,
+                ),
                 const SizedBox(height: 4),
                 Text(
                   AppStrings.lessonCount('${course.lessonCount}'),

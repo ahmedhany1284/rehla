@@ -2,23 +2,32 @@
   "courses": [
     {
       "id": "anatomy-101",
-      "title": "مقدمة في التشريح",
-      "instructor": "د. سارة",
+      "title": {
+        "ar": "مقدمة في التشريح",
+        "en": "Introduction to Anatomy"
+      },
+      "instructor": {
+        "ar": "د. سارة",
+        "en": "Dr. Sara"
+      },
       "thumbnail": "assets/logo/logo.png",
       "sections": [
         {
           "id": "s1",
-          "title": "الجهاز الهيكلي",
+          "title": {
+            "ar": "الجهاز الهيكلي",
+            "en": "The skeletal system"
+          },
           "lessons": [
             {
               "id": "l1",
-              "title": "العظام",
+              "title": { "ar": "العظام", "en": "Bones" },
               "durationSec": 95,
               "video": ""
             },
             {
               "id": "l2",
-              "title": "المفاصل",
+              "title": { "ar": "المفاصل", "en": "Joints" },
               "durationSec": 80,
               "video": ""
             }
@@ -26,17 +35,20 @@
         },
         {
           "id": "s2",
-          "title": "الجهاز العضلي",
+          "title": {
+            "ar": "الجهاز العضلي",
+            "en": "The muscular system"
+          },
           "lessons": [
             {
               "id": "l3",
-              "title": "أنواع العضلات",
+              "title": { "ar": "أنواع العضلات", "en": "Muscle types" },
               "durationSec": 110,
               "video": ""
             },
             {
               "id": "l4",
-              "title": "الحركة",
+              "title": { "ar": "الحركة", "en": "Movement" },
               "durationSec": 90,
               "video": ""
             }
@@ -46,23 +58,29 @@
     },
     {
       "id": "physiology-101",
-      "title": "أساسيات وظائف الأعضاء",
-      "instructor": "د. أحمد",
+      "title": {
+        "ar": "أساسيات وظائف الأعضاء",
+        "en": "Physiology basics"
+      },
+      "instructor": {
+        "ar": "د. أحمد",
+        "en": "Dr. Ahmed"
+      },
       "thumbnail": "assets/logo/logo.png",
       "sections": [
         {
           "id": "s3",
-          "title": "الخلية",
+          "title": { "ar": "الخلية", "en": "The cell" },
           "lessons": [
             {
               "id": "l5",
-              "title": "غشاء الخلية",
+              "title": { "ar": "غشاء الخلية", "en": "Cell membrane" },
               "durationSec": 100,
               "video": ""
             },
             {
               "id": "l6",
-              "title": "النقل",
+              "title": { "ar": "النقل", "en": "Transport" },
               "durationSec": 85,
               "video": ""
             }
@@ -70,23 +88,26 @@
         },
         {
           "id": "s4",
-          "title": "الجهاز العصبي",
+          "title": {
+            "ar": "الجهاز العصبي",
+            "en": "The nervous system"
+          },
           "lessons": [
             {
               "id": "l7",
-              "title": "العصبون",
+              "title": { "ar": "العصبون", "en": "The neuron" },
               "durationSec": 120,
               "video": ""
             },
             {
               "id": "l8",
-              "title": "الإشارة العصبية",
+              "title": { "ar": "الإشارة العصبية", "en": "The nerve signal" },
               "durationSec": 95,
               "video": ""
             },
             {
               "id": "l9",
-              "title": "المشبك",
+              "title": { "ar": "المشبك", "en": "The synapse" },
               "durationSec": 75,
               "video": ""
             }

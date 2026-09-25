@@ -4,6 +4,7 @@ import 'package:rehla/core/theme/app_colors.dart';
 import 'package:rehla/core/theme/app_text_style.dart';
 import 'package:rehla/core/utils/app_strings.dart';
 import 'package:rehla/features/home/domain/entities/course.dart';
+import 'package:rehla/features/home/presentation/view/extensions/localized_string.dart';
 
 class ContinueWatchingCard extends StatelessWidget {
   const ContinueWatchingCard({super.key, required this.item});
@@ -30,14 +31,14 @@ class ContinueWatchingCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            item.lesson.title,
+            item.lesson.title.localized(context),
             style: AppTextStyle.semiBold16.copyWith(
               color: AppColors.whiteConstant,
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            item.course.title,
+            item.course.title.localized(context),
             style: AppTextStyle.regular14.copyWith(
               color: AppColors.whiteConstant,
             ),
