@@ -1,3 +1,11 @@
 {
-  "app_name": "Rehla"
+  "app_name": "Rehla",
+  "home_title": "Courses",
+  "continue_watching": "Continue watching",
+  "continue": "Continue",
+  "retry": "Retry",
+  "courses_empty": "No courses yet",
+  "courses_load_failed": "Could not load courses",
+  "lesson_count": "{count} lessons",
+  "progress_percent": "{percent}%"
 }

@@ -1,0 +1,98 @@
+{
+  "courses": [
+    {
+      "id": "anatomy-101",
+      "title": "مقدمة في التشريح",
+      "instructor": "د. سارة",
+      "thumbnail": "assets/logo/logo.png",
+      "sections": [
+        {
+          "id": "s1",
+          "title": "الجهاز الهيكلي",
+          "lessons": [
+            {
+              "id": "l1",
+              "title": "العظام",
+              "durationSec": 95,
+              "video": ""
+            },
+            {
+              "id": "l2",
+              "title": "المفاصل",
+              "durationSec": 80,
+              "video": ""
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "الجهاز العضلي",
+          "lessons": [
+            {
+              "id": "l3",
+              "title": "أنواع العضلات",
+              "durationSec": 110,
+              "video": ""
+            },
+            {
+              "id": "l4",
+              "title": "الحركة",
+              "durationSec": 90,
+              "video": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "physiology-101",
+      "title": "أساسيات وظائف الأعضاء",
+      "instructor": "د. أحمد",
+      "thumbnail": "assets/logo/logo.png",
+      "sections": [
+        {
+          "id": "s3",
+          "title": "الخلية",
+          "lessons": [
+            {
+              "id": "l5",
+              "title": "غشاء الخلية",
+              "durationSec": 100,
+              "video": ""
+            },
+            {
+              "id": "l6",
+              "title": "النقل",
+              "durationSec": 85,
+              "video": ""
+            }
+          ]
+        },
+        {
+          "id": "s4",
+          "title": "الجهاز العصبي",
+          "lessons": [
+            {
+              "id": "l7",
+              "title": "العصبون",
+              "durationSec": 120,
+              "video": ""
+            },
+            {
+              "id": "l8",
+              "title": "الإشارة العصبية",
+              "durationSec": 95,
+              "video": ""
+            },
+            {
+              "id": "l9",
+              "title": "المشبك",
+              "durationSec": 75,
+              "video": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

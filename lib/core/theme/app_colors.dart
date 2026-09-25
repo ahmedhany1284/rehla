@@ -20,4 +20,14 @@ class AppColors {
 
   static Color get white =>
       AppConst.isDark ? const Color(0xFF131921) : Colors.white;
+
+  static Color get whiteConstant => Colors.white;
+
+  static Color get label => AppConst.isDark ? mainWhite50 : primaryDark;
+
+  static Color get shimmerBase =>
+      AppConst.isDark ? const Color(0xFF2A2D36) : const Color(0xFFE0E0E0);
+
+  static Color get shimmerHighlight =>
+      AppConst.isDark ? const Color(0xFF3A3F4B) : const Color(0xFFF5F5F5);
 }

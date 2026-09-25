@@ -1,3 +1,11 @@
 {
-  "app_name": "رحلة"
+  "app_name": "رحلة",
+  "home_title": "الدورات",
+  "continue_watching": "تابع المشاهدة",
+  "continue": "متابعة",
+  "retry": "إعادة المحاولة",
+  "courses_empty": "لا توجد دورات بعد",
+  "courses_load_failed": "تعذر تحميل الدورات",
+  "lesson_count": "{count} دروس",
+  "progress_percent": "{percent}%"
 }

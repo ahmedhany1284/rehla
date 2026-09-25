@@ -2,6 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppCacheHelper {
   static const String isDark = 'isDark';
+  static const String lessonProgress = 'lesson_progress';
 
   static SharedPreferences? _prefs;
 
@@ -18,5 +19,9 @@ class AppCacheHelper {
     required bool value,
   }) async {
     await _prefs?.setBool(key, value);
+  }
+
+  static String getCacheString({required String key}) {
+    return _prefs?.getString(key) ?? '';
   }
 }
