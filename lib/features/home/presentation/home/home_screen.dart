@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rehla/core/presentation/view/widgets/app_custom_image_view.dart';
 import 'package:rehla/core/presentation/view/widgets/main_button.dart';
 import 'package:rehla/core/presentation/view/widgets/qallery_outfit_shimmar.dart';
 import 'package:rehla/core/presentation/view/widgets/simple_appbar.dart';
+import 'package:rehla/core/presentation/view_model/cubit/app_cubit.dart';
+import 'package:rehla/core/presentation/view_model/cubit/app_state.dart';
+import 'package:rehla/core/routing/app_router.dart';
 import 'package:rehla/core/theme/app_colors.dart';
 import 'package:rehla/core/utils/app_strings.dart';
 import 'package:rehla/core/theme/app_text_style.dart';
@@ -15,11 +19,19 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (context, appState) {
+        return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppSimpleAppBar(
         title: AppStrings.homeTitle,
         isLeading: false,
+        actions: [
+          IconButton(
+            onPressed: () => context.push(AppRouter.kSettings),
+            icon: Icon(Icons.settings_outlined, color: AppColors.label),
+          ),
+        ],
       ),
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
@@ -58,6 +70,8 @@ class HomeScreen extends StatelessWidget {
           );
         },
       ),
+        );
+      },
     );
   }
 }

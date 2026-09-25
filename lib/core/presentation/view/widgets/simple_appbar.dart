@@ -31,7 +31,6 @@ class AppSimpleAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isRtl = Directionality.of(context) == TextDirection.rtl;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return AppBar(
       systemOverlayStyle: systemOverlayStyle ??
@@ -53,7 +52,7 @@ class AppSimpleAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? IconButton(
               onPressed: onTap ?? () => Navigator.of(context).maybePop(),
               icon: Icon(
-                isRtl ? Icons.arrow_forward : Icons.arrow_back,
+                Icons.arrow_back,
                 color: AppColors.primaryDark,
               ),
             )

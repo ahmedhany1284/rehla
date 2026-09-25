@@ -4,11 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rehla/core/presentation/view/focus_handler.dart';
 import 'package:rehla/features/home/presentation/home/home_screen.dart';
+import 'package:rehla/features/settings/presentation/settings_screen.dart';
 
 enum PageRouteAnimation { fade, scale, rotate, slide, slideBottomTop }
 
 class AppRouter {
   static const String kHome = '/';
+  static const String kSettings = '/settings';
 
   static Page<void> animateRoute(
     Widget widget, {
@@ -87,6 +89,15 @@ class AppRouter {
           return animateRoute(
             const HomeScreen(),
             pageRouteAnimation: PageRouteAnimation.fade,
+          );
+        },
+      ),
+      GoRoute(
+        path: kSettings,
+        pageBuilder: (context, state) {
+          return animateRoute(
+            const SettingsScreen(),
+            pageRouteAnimation: PageRouteAnimation.slide,
           );
         },
       ),

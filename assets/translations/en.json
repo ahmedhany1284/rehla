@@ -7,5 +7,15 @@
   "courses_empty": "No courses yet",
   "courses_load_failed": "Could not load courses",
   "lesson_count": "{count} lessons",
-  "progress_percent": "{percent}%"
+  "progress_percent": "{percent}%",
+  "settings": "Settings",
+  "language": "Language",
+  "theme": "Theme",
+  "arabic": "العربية",
+  "english": "English",
+  "light": "Light mode",
+  "dark": "Dark mode",
+  "select_language": "Select language",
+  "select_theme": "Select theme",
+  "apply": "Apply"
 }

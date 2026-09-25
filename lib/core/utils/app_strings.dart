@@ -20,4 +20,24 @@ class AppStrings {
 
   static String progressPercent(String percent) =>
       'progress_percent'.tr(namedArgs: {'percent': percent});
+
+  static String get settings => 'settings'.tr();
+
+  static String get language => 'language'.tr();
+
+  static String get theme => 'theme'.tr();
+
+  static String get arabic => 'arabic'.tr();
+
+  static String get english => 'english'.tr();
+
+  static String get light => 'light'.tr();
+
+  static String get dark => 'dark'.tr();
+
+  static String get selectLanguage => 'select_language'.tr();
+
+  static String get selectTheme => 'select_theme'.tr();
+
+  static String get apply => 'apply'.tr();
 }

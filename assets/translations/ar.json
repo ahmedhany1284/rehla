@@ -7,5 +7,15 @@
   "courses_empty": "لا توجد دورات بعد",
   "courses_load_failed": "تعذر تحميل الدورات",
   "lesson_count": "{count} دروس",
-  "progress_percent": "{percent}%"
+  "progress_percent": "{percent}%",
+  "settings": "الإعدادات",
+  "language": "اللغة",
+  "theme": "المظهر",
+  "arabic": "العربية",
+  "english": "English",
+  "light": "الوضع الفاتح",
+  "dark": "الوضع الداكن",
+  "select_language": "اختر اللغة",
+  "select_theme": "اختر المظهر",
+  "apply": "تطبيق"
 }
