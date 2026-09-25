@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rehla/core/presentation/view/focus_handler.dart';
-import 'package:rehla/features/home/presentation/home/home_screen.dart';
-import 'package:rehla/features/settings/presentation/settings_screen.dart';
+import 'package:rehla/features/home/presentation/view/home_screen.dart';
+import 'package:rehla/features/settings/presentation/view/settings_screen.dart';
 
 enum PageRouteAnimation { fade, scale, rotate, slide, slideBottomTop }
 

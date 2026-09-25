@@ -12,7 +12,7 @@ import 'package:rehla/core/utils/app_strings.dart';
 import 'package:rehla/features/home/data/datasources/course_local_datasource.dart';
 import 'package:rehla/features/home/data/repositories/course_repository_impl.dart';
 import 'package:rehla/features/home/domain/usecases/get_courses_usecase.dart';
-import 'package:rehla/features/home/presentation/home/home_cubit.dart';
+import 'package:rehla/features/home/presentation/view-model/home_cubit.dart';
 import 'package:rehla/generated/assets.dart';
 
 Future<void> main() async {
