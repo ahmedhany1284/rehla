@@ -22,14 +22,14 @@
             {
               "id": "l1",
               "title": { "ar": "العظام", "en": "Bones" },
-              "durationSec": 95,
-              "video": ""
+              "durationSec": 221,
+              "video": "assets/videos/lesson1.mp4"
             },
             {
               "id": "l2",
               "title": { "ar": "المفاصل", "en": "Joints" },
-              "durationSec": 80,
-              "video": ""
+              "durationSec": 161,
+              "video": "assets/videos/lesson2.mp4"
             }
           ]
         },
@@ -43,14 +43,14 @@
             {
               "id": "l3",
               "title": { "ar": "أنواع العضلات", "en": "Muscle types" },
-              "durationSec": 110,
-              "video": ""
+              "durationSec": 221,
+              "video": "assets/videos/lesson1.mp4"
             },
             {
               "id": "l4",
               "title": { "ar": "الحركة", "en": "Movement" },
-              "durationSec": 90,
-              "video": ""
+              "durationSec": 161,
+              "video": "assets/videos/lesson2.mp4"
             }
           ]
         }
@@ -75,14 +75,14 @@
             {
               "id": "l5",
               "title": { "ar": "غشاء الخلية", "en": "Cell membrane" },
-              "durationSec": 100,
-              "video": ""
+              "durationSec": 221,
+              "video": "assets/videos/lesson1.mp4"
             },
             {
               "id": "l6",
               "title": { "ar": "النقل", "en": "Transport" },
-              "durationSec": 85,
-              "video": ""
+              "durationSec": 161,
+              "video": "assets/videos/lesson2.mp4"
             }
           ]
         },
@@ -96,20 +96,20 @@
             {
               "id": "l7",
               "title": { "ar": "العصبون", "en": "The neuron" },
-              "durationSec": 120,
-              "video": ""
+              "durationSec": 221,
+              "video": "assets/videos/lesson1.mp4"
             },
             {
               "id": "l8",
               "title": { "ar": "الإشارة العصبية", "en": "The nerve signal" },
-              "durationSec": 95,
-              "video": ""
+              "durationSec": 161,
+              "video": "assets/videos/lesson2.mp4"
             },
             {
               "id": "l9",
               "title": { "ar": "المشبك", "en": "The synapse" },
-              "durationSec": 75,
-              "video": ""
+              "durationSec": 0,
+              "video": "assets/videos/missing.mp4"
             }
           ]
         }
