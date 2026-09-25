@@ -69,6 +69,7 @@ flutter:
   assets:
     - assets/translations/
     - assets/logo/logo.png
+    - assets/thumbnails/
     - assets/data/courses.json
     - assets/videos/
 

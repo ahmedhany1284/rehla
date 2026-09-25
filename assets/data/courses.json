@@ -10,7 +10,7 @@
         "ar": "د. سارة",
         "en": "Dr. Sara"
       },
-      "thumbnail": "assets/logo/logo.png",
+      "thumbnail": "assets/thumbnails/anatomy.jpg",
       "sections": [
         {
           "id": "s1",
@@ -82,7 +82,7 @@
         "ar": "د. أحمد",
         "en": "Dr. Ahmed"
       },
-      "thumbnail": "assets/logo/logo.png",
+      "thumbnail": "assets/thumbnails/physiology.jpg",
       "sections": [
         {
           "id": "s3",
