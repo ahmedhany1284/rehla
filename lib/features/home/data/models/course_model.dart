@@ -48,6 +48,7 @@ class LessonModel extends Lesson {
   const LessonModel({
     required super.id,
     required super.title,
+    required super.description,
     required super.durationSec,
     required super.video,
   });
@@ -56,6 +57,7 @@ class LessonModel extends Lesson {
     return LessonModel(
       id: json['id'] as String? ?? '',
       title: _localized(json['title']),
+      description: _localized(json['description']),
       durationSec: json['durationSec'] as int? ?? 0,
       video: json['video'] as String? ?? '',
     );

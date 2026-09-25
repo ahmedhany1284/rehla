@@ -22,12 +22,20 @@
             {
               "id": "l1",
               "title": { "ar": "العظام", "en": "Bones" },
+              "description": {
+                "ar": "تعرف على شكل العظم وبنيته، وكيف يحمل الجسم ويحمي الأعضاء.",
+                "en": "How a bone is built, and how it supports the body and protects the organs."
+              },
               "durationSec": 221,
               "video": "assets/videos/lesson1.mp4"
             },
             {
               "id": "l2",
               "title": { "ar": "المفاصل", "en": "Joints" },
+              "description": {
+                "ar": "أنواع المفاصل، وما الذي يسمح للعظام أن تتحرك معًا.",
+                "en": "The kinds of joints, and what lets bones move together."
+              },
               "durationSec": 161,
               "video": "assets/videos/lesson2.mp4"
             }
@@ -43,12 +51,20 @@
             {
               "id": "l3",
               "title": { "ar": "أنواع العضلات", "en": "Muscle types" },
+              "description": {
+                "ar": "الفرق بين العضلة الهيكلية والقلبية والملساء، وأين توجد كل واحدة.",
+                "en": "Skeletal, cardiac, and smooth muscle, and where each one sits."
+              },
               "durationSec": 221,
               "video": "assets/videos/lesson1.mp4"
             },
             {
               "id": "l4",
               "title": { "ar": "الحركة", "en": "Movement" },
+              "description": {
+                "ar": "كيف تنقبض العضلة وتحرك العظم عبر المفصل.",
+                "en": "How a muscle contracts and moves a bone across a joint."
+              },
               "durationSec": 161,
               "video": "assets/videos/lesson2.mp4"
             }
@@ -75,12 +91,20 @@
             {
               "id": "l5",
               "title": { "ar": "غشاء الخلية", "en": "Cell membrane" },
+              "description": {
+                "ar": "طبقات الغشاء، وما الذي يدخل الخلية وما الذي يبقى خارجها.",
+                "en": "The membrane layers, and what enters the cell or stays outside."
+              },
               "durationSec": 221,
               "video": "assets/videos/lesson1.mp4"
             },
             {
               "id": "l6",
               "title": { "ar": "النقل", "en": "Transport" },
+              "description": {
+                "ar": "النقل السلبي والنشط، وكيف تعبر المواد الغشاء.",
+                "en": "Passive and active transport, and how substances cross the membrane."
+              },
               "durationSec": 161,
               "video": "assets/videos/lesson2.mp4"
             }
@@ -96,18 +120,30 @@
             {
               "id": "l7",
               "title": { "ar": "العصبون", "en": "The neuron" },
+              "description": {
+                "ar": "أجزاء العصبون، ودور كل جزء في نقل الإشارة.",
+                "en": "The parts of a neuron, and what each part does in a signal."
+              },
               "durationSec": 221,
               "video": "assets/videos/lesson1.mp4"
             },
             {
               "id": "l8",
               "title": { "ar": "الإشارة العصبية", "en": "The nerve signal" },
+              "description": {
+                "ar": "كيف ينشأ جهد الفعل ويسير على طول المحور.",
+                "en": "How an action potential starts and travels along the axon."
+              },
               "durationSec": 161,
               "video": "assets/videos/lesson2.mp4"
             },
             {
               "id": "l9",
               "title": { "ar": "المشبك", "en": "The synapse" },
+              "description": {
+                "ar": "كيف تنتقل الإشارة من عصبون إلى الذي يليه.",
+                "en": "How a signal passes from one neuron to the next."
+              },
               "durationSec": 0,
               "video": "assets/videos/missing.mp4"
             }

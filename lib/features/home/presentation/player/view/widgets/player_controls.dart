@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rehla/core/presentation/view/widgets/app_custom_bottom_sheet.dart';
-import 'package:rehla/core/presentation/view/widgets/main_button.dart';
 import 'package:rehla/core/presentation/view/widgets/radio_option.dart';
 import 'package:rehla/core/theme/app_colors.dart';
 import 'package:rehla/core/theme/app_text_style.dart';
@@ -9,14 +8,9 @@ import 'package:rehla/core/utils/app_strings.dart';
 import 'package:rehla/features/home/presentation/player/view-model/player_cubit.dart';
 
 class PlayerControls extends StatelessWidget {
-  const PlayerControls({
-    super.key,
-    required this.onFullscreen,
-    required this.onNext,
-  });
+  const PlayerControls({super.key, required this.onFullscreen});
 
   final VoidCallback onFullscreen;
-  final VoidCallback onNext;
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +34,19 @@ class PlayerControls extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  Text(_clock(state.position), style: AppTextStyle.regular14),
+                  Text(
+                    _clock(state.position),
+                    style: AppTextStyle.regular14.copyWith(
+                      color: AppColors.whiteConstant,
+                    ),
+                  ),
                   const Spacer(),
-                  Text(_clock(state.duration), style: AppTextStyle.regular14),
+                  Text(
+                    _clock(state.duration),
+                    style: AppTextStyle.regular14.copyWith(
+                      color: AppColors.whiteConstant,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -60,23 +64,22 @@ class PlayerControls extends StatelessWidget {
                   ),
                 ),
                 IconButton(
+                  onPressed: cubit.toggleMute,
+                  icon: Icon(
+                    state.muted ? Icons.volume_off : Icons.volume_up,
+                    color: AppColors.whiteConstant,
+                  ),
+                ),
+                IconButton(
                   onPressed: () => _openSpeed(context, state.speed),
-                  icon: Icon(Icons.speed, color: AppColors.label),
+                  icon: Icon(Icons.speed, color: AppColors.whiteConstant),
                 ),
                 IconButton(
                   onPressed: onFullscreen,
-                  icon: Icon(Icons.fullscreen, color: AppColors.label),
+                  icon: Icon(Icons.fullscreen, color: AppColors.whiteConstant),
                 ),
               ],
             ),
-            if (state.hasNext)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                child: AppDefaultButton(
-                  buttonText: AppStrings.nextLesson,
-                  ontap: state.nextUnlocked ? onNext : null,
-                ),
-              ),
           ],
         );
       },

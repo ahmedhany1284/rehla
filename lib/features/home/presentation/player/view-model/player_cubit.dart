@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import 'package:rehla/features/home/domain/entities/course.dart';
@@ -44,6 +45,13 @@ class PlayerCubit extends Cubit<PlayerState> {
         }
         _lessons = playback.lessons;
         _completed = playback.progress?.completed ?? false;
+        emit(
+          state.copyWith(
+            title: playback.lesson.title,
+            description: playback.lesson.description,
+            instructor: playback.instructor,
+          ),
+        );
         final video = VideoPlayerController.asset(playback.lesson.video);
         controller = video;
         try {
@@ -53,6 +61,7 @@ class PlayerCubit extends Cubit<PlayerState> {
             emit(state.copyWith(status: PlayerStatus.error));
             return;
           }
+          await video.setVolume(1);
           video.addListener(_onTick);
           final saved = playback.progress?.positionSec ?? 0;
           if (!_completed && saved > 0) {
@@ -88,6 +97,14 @@ class PlayerCubit extends Cubit<PlayerState> {
     _emitFromController(
       video.value.isPlaying ? PlayerStatus.playing : PlayerStatus.paused,
     );
+  }
+
+  Future<void> toggleMute() async {
+    final video = controller;
+    if (video == null) return;
+    final muted = !state.muted;
+    await video.setVolume(muted ? 0 : 1);
+    emit(state.copyWith(muted: muted));
   }
 
   Future<void> setSpeed(double speed) async {
@@ -140,6 +157,7 @@ class PlayerCubit extends Cubit<PlayerState> {
         hasNext: next != null,
         nextUnlocked: next != null && next.isNotEmpty,
         nextLessonId: next ?? '',
+        audioOnly: video.value.size == Size.zero,
       ),
     );
   }

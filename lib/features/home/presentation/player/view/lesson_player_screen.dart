@@ -13,6 +13,7 @@ import 'package:rehla/core/theme/app_text_style.dart';
 import 'package:rehla/core/utils/app_strings.dart';
 import 'package:rehla/features/home/presentation/player/view-model/player_cubit.dart';
 import 'package:rehla/features/home/presentation/player/view/widgets/player_controls.dart';
+import 'package:rehla/features/home/presentation/view/extensions/localized_string.dart';
 import 'package:video_player/video_player.dart';
 
 class LessonPlayerScreen extends StatefulWidget {
@@ -77,7 +78,11 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
               backgroundColor: AppColors.background,
               appBar: _fullscreen
                   ? null
-                  : AppCustomAppBar(title: AppStrings.lesson),
+                  : AppCustomAppBar(
+                      title: state.title.localized(context).isEmpty
+                          ? AppStrings.lesson
+                          : state.title.localized(context),
+                    ),
               body: switch (state.status) {
                 PlayerStatus.loading => const Center(
                   child: QalleryOutfitShimmar(),
@@ -91,24 +96,63 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
                 ),
                 _ => Column(
                   children: [
-                    if (video != null && video.value.isInitialized)
-                      AspectRatio(
-                        aspectRatio: video.value.aspectRatio,
-                        child: VideoPlayer(video),
+                    ColoredBox(
+                      color: AppColors.mainBlack900,
+                      child: AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            if (video != null && video.value.isInitialized)
+                              VideoPlayer(video),
+                            if (state.audioOnly)
+                              Center(
+                                child: Icon(
+                                  Icons.graphic_eq,
+                                  color: AppColors.whiteConstant,
+                                  size: 64,
+                                ),
+                              ),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: PlayerControls(
+                                onFullscreen: _toggleFullscreen,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+                    ),
                     if (!_fullscreen)
                       Expanded(
-                        child: SingleChildScrollView(
-                          child: PlayerControls(
-                            onFullscreen: _toggleFullscreen,
-                            onNext: () => _openNext(context, state),
-                          ),
+                        child: ListView(
+                          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                          children: [
+                            Text(
+                              state.title.localized(context),
+                              style: AppTextStyle.semiBold16,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              state.instructor.localized(context),
+                              style: AppTextStyle.regular14,
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              state.description.localized(context),
+                              style: AppTextStyle.regular14,
+                            ),
+                            if (state.hasNext) ...[
+                              const SizedBox(height: 24),
+                              AppDefaultButton(
+                                buttonText: AppStrings.nextLesson,
+                                ontap: state.nextUnlocked
+                                    ? () => _openNext(context, state)
+                                    : null,
+                              ),
+                            ],
+                          ],
                         ),
-                      )
-                    else
-                      PlayerControls(
-                        onFullscreen: _toggleFullscreen,
-                        onNext: () => _openNext(context, state),
                       ),
                   ],
                 ),

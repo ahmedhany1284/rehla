@@ -14,6 +14,11 @@ class PlayerState extends Equatable {
     this.hasNext = false,
     this.nextUnlocked = false,
     this.nextLessonId = '',
+    this.title = const LocalizedString(ar: '', en: ''),
+    this.description = const LocalizedString(ar: '', en: ''),
+    this.instructor = const LocalizedString(ar: '', en: ''),
+    this.muted = false,
+    this.audioOnly = false,
   });
 
   final PlayerStatus status;
@@ -24,6 +29,11 @@ class PlayerState extends Equatable {
   final bool hasNext;
   final bool nextUnlocked;
   final String nextLessonId;
+  final LocalizedString title;
+  final LocalizedString description;
+  final LocalizedString instructor;
+  final bool muted;
+  final bool audioOnly;
 
   PlayerState copyWith({
     PlayerStatus? status,
@@ -34,6 +44,11 @@ class PlayerState extends Equatable {
     bool? hasNext,
     bool? nextUnlocked,
     Object? nextLessonId = _undefined,
+    LocalizedString? title,
+    LocalizedString? description,
+    LocalizedString? instructor,
+    bool? muted,
+    bool? audioOnly,
   }) {
     return PlayerState(
       status: status ?? this.status,
@@ -46,6 +61,11 @@ class PlayerState extends Equatable {
       nextLessonId: identical(nextLessonId, _undefined)
           ? this.nextLessonId
           : nextLessonId as String,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      instructor: instructor ?? this.instructor,
+      muted: muted ?? this.muted,
+      audioOnly: audioOnly ?? this.audioOnly,
     );
   }
 
@@ -59,5 +79,10 @@ class PlayerState extends Equatable {
     hasNext,
     nextUnlocked,
     nextLessonId,
+    title,
+    description,
+    instructor,
+    muted,
+    audioOnly,
   ];
 }

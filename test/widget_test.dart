@@ -16,12 +16,14 @@ void main() {
             Lesson(
               id: 'l1',
               title: LocalizedString(ar: 'عظام', en: 'Bones'),
+              description: LocalizedString(ar: 'وصف', en: 'About'),
               durationSec: 10,
               video: 'a',
             ),
             Lesson(
               id: 'l2',
               title: LocalizedString(ar: 'مفاصل', en: 'Joints'),
+              description: LocalizedString(ar: 'وصف', en: 'About'),
               durationSec: 10,
               video: 'b',
             ),
@@ -34,6 +36,7 @@ void main() {
             Lesson(
               id: 'l3',
               title: LocalizedString(ar: 'أنواع', en: 'Types'),
+              description: LocalizedString(ar: 'وصف', en: 'About'),
               durationSec: 10,
               video: 'c',
             ),

@@ -19,15 +19,17 @@ class LessonPlayback extends Equatable {
   const LessonPlayback({
     required this.lesson,
     required this.lessons,
+    required this.instructor,
     this.progress,
   });
 
   final Lesson lesson;
   final List<Lesson> lessons;
+  final LocalizedString instructor;
   final LessonProgress? progress;
 
   @override
-  List<Object?> get props => [lesson, lessons, progress];
+  List<Object?> get props => [lesson, lessons, instructor, progress];
 }
 
 class GetLessonPlaybackUseCase extends BaseUseCase<LessonPlayback, LessonRequest> {
@@ -45,6 +47,7 @@ class GetLessonPlaybackUseCase extends BaseUseCase<LessonPlayback, LessonRequest
             LessonPlayback(
               lesson: lesson,
               lessons: lookup.course.lessons,
+              instructor: lookup.course.instructor,
               progress: lookup.progress[lesson.id],
             ),
           );

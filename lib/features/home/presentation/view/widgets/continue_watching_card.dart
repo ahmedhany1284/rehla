@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rehla/core/presentation/view/widgets/main_button.dart';
+import 'package:rehla/core/routing/app_router.dart';
 import 'package:rehla/core/theme/app_colors.dart';
 import 'package:rehla/core/theme/app_text_style.dart';
 import 'package:rehla/core/utils/app_strings.dart';
 import 'package:rehla/features/home/domain/entities/course.dart';
+import 'package:rehla/features/home/presentation/view-model/home_cubit.dart';
 import 'package:rehla/features/home/presentation/view/extensions/localized_string.dart';
 
 class ContinueWatchingCard extends StatelessWidget {
@@ -48,7 +52,14 @@ class ContinueWatchingCard extends StatelessWidget {
             buttonText: AppStrings.continueLabel,
             backgroundColor: AppColors.whiteConstant,
             textColor: AppColors.primaryDark,
-            ontap: () {},
+            ontap: () async {
+              await context.push(
+                AppRouter.lessonPlayer(item.course.id, item.lesson.id),
+              );
+              if (context.mounted) {
+                context.read<HomeCubit>().getCourses();
+              }
+            },
           ),
         ],
       ),

@@ -14,17 +14,19 @@ class Lesson extends Equatable {
   const Lesson({
     required this.id,
     required this.title,
+    required this.description,
     required this.durationSec,
     required this.video,
   });
 
   final String id;
   final LocalizedString title;
+  final LocalizedString description;
   final int durationSec;
   final String video;
 
   @override
-  List<Object> get props => [id, title, durationSec, video];
+  List<Object> get props => [id, title, description, durationSec, video];
 }
 
 class Section extends Equatable {
