@@ -85,6 +85,7 @@ class PlayerCubit extends Cubit<PlayerState> {
       _emitFromController(PlayerStatus.paused);
       return;
     }
+    await video.setVolume(state.muted ? 0 : 1);
     await video.play();
     _emitFromController(PlayerStatus.playing);
   }
@@ -128,6 +129,10 @@ class PlayerCubit extends Cubit<PlayerState> {
   void _onTick() {
     final video = controller;
     if (video == null || !video.value.isInitialized || isClosed) return;
+    if (video.value.hasError) {
+      emit(state.copyWith(status: PlayerStatus.error));
+      return;
+    }
     final positionMs = video.value.position.inMilliseconds;
     final durationMs = video.value.duration.inMilliseconds;
     if (!_completed &&

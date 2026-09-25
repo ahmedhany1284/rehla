@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,10 +34,16 @@ class LessonPlayerScreen extends StatefulWidget {
 
 class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
   bool _fullscreen = false;
+  bool _controlsVisible = true;
+  Timer? _hideTimer;
 
   Future<void> _toggleFullscreen() async {
     final next = !_fullscreen;
-    setState(() => _fullscreen = next);
+    setState(() {
+      _fullscreen = next;
+      _controlsVisible = true;
+    });
+    _scheduleHide();
     if (next) {
       await SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeLeft,
@@ -45,6 +53,20 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
       return;
     }
     await _restoreOrientation();
+  }
+
+  void _onVideoTap() {
+    if (!_fullscreen) return;
+    setState(() => _controlsVisible = !_controlsVisible);
+    _scheduleHide();
+  }
+
+  void _scheduleHide() {
+    _hideTimer?.cancel();
+    if (!_fullscreen || !_controlsVisible) return;
+    _hideTimer = Timer(const Duration(seconds: 3), () {
+      if (mounted) setState(() => _controlsVisible = false);
+    });
   }
 
   void _openNext(BuildContext context, PlayerState state) {
@@ -63,6 +85,7 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
 
   @override
   void dispose() {
+    _hideTimer?.cancel();
     _restoreOrientation();
     super.dispose();
   }
@@ -96,33 +119,37 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
                 ),
                 _ => Column(
                   children: [
-                    ColoredBox(
-                      color: AppColors.mainBlack900,
-                      child: AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            if (video != null && video.value.isInitialized)
-                              VideoPlayer(video),
-                            if (state.audioOnly)
-                              Center(
-                                child: Icon(
-                                  Icons.graphic_eq,
-                                  color: AppColors.whiteConstant,
-                                  size: 64,
-                                ),
-                              ),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: PlayerControls(
-                                onFullscreen: _toggleFullscreen,
-                              ),
-                            ),
-                          ],
+                    if (_fullscreen)
+                      Expanded(
+                        child: ColoredBox(
+                          color: AppColors.mainBlack900,
+                          child: _FittedVideo(
+                            controller: video,
+                            audioOnly: state.audioOnly,
+                            onTap: _onVideoTap,
+                            controls: _controlsVisible
+                                ? PlayerControls(
+                                    fullscreen: true,
+                                    onFullscreen: _toggleFullscreen,
+                                    onInteraction: _scheduleHide,
+                                  )
+                                : null,
+                          ),
+                        ),
+                      )
+                    else
+                      ColoredBox(
+                        color: AppColors.mainBlack900,
+                        child: _FittedVideo(
+                          controller: video,
+                          audioOnly: state.audioOnly,
+                          onTap: _onVideoTap,
+                          controls: PlayerControls(
+                            fullscreen: false,
+                            onFullscreen: _toggleFullscreen,
+                          ),
                         ),
                       ),
-                    ),
                     if (!_fullscreen)
                       Expanded(
                         child: ListView(
@@ -159,6 +186,72 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
               },
             );
           },
+        );
+      },
+    );
+  }
+}
+
+class _FittedVideo extends StatelessWidget {
+  const _FittedVideo({
+    required this.controller,
+    required this.audioOnly,
+    required this.onTap,
+    required this.controls,
+  });
+
+  final VideoPlayerController? controller;
+  final bool audioOnly;
+  final VoidCallback onTap;
+  final Widget? controls;
+
+  @override
+  Widget build(BuildContext context) {
+    final video = controller;
+    final ready = video != null && video.value.isInitialized;
+    final aspect = ready && video.value.aspectRatio > 0
+        ? video.value.aspectRatio
+        : 16 / 9;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = constraints.maxWidth;
+        final bounded = constraints.maxHeight.isFinite;
+        final maxHeight = bounded ? constraints.maxHeight : maxWidth / aspect;
+        var width = maxWidth;
+        var height = width / aspect;
+        if (height > maxHeight) {
+          height = maxHeight;
+          width = height * aspect;
+        }
+        return GestureDetector(
+          onTap: onTap,
+          child: SizedBox(
+            width: maxWidth,
+            height: maxHeight,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: width,
+                  height: height,
+                  child: ready ? VideoPlayer(video) : const SizedBox.shrink(),
+                ),
+                if (audioOnly)
+                  Icon(
+                    Icons.graphic_eq,
+                    color: AppColors.whiteConstant,
+                    size: 64,
+                  ),
+                if (controls != null)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: controls!,
+                  ),
+              ],
+            ),
+          ),
         );
       },
     );
